@@ -1,0 +1,41 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "mod.torchbowmod",
+		"id": "torchbowmod",
+		"version": "${version}",
+		"metadata": {
+			"name": "TorchBowMod",
+			"description": "TorchBowMod for quilt!",
+			"contributors": {
+				"Your name here": "noriokun4649"
+			},
+			"contact": {
+				"homepage": "https://www.curseforge.com/minecraft/mc-mods/torchbowmod",
+				"sources": "https://github.com/noriokun4649/TorchBowMod-fabric",
+				"issues": "https://github.com/noriokun4649/TorchBowMod-fabric/issues",
+				"email": "noriokun.official.mail@gmail.com"
+			},
+			"icon": "assets/torchbowmod/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"init": "mod.torchbowmod.TorchBowMod",
+			"client_init": "mod.torchbowmod.TorchBowModClient"
+		},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.17.0-"
+			},
+			{
+				"id": "quilted_fabric_api",
+				"versions": ">=2.0.0-"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.19"
+			}
+		]
+	}
+}
