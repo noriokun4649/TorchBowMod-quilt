@@ -41,7 +41,7 @@ public class TorchBowModClient implements ClientModInitializer {
 				TorchEntity torchEntity = new TorchEntity(world, playerEntity);
 				torchEntity.setPos(x, y, z);
 				torchEntity.setId(entityId);
-				torchEntity.method_43391(x, y, z);
+				torchEntity.syncPacketPositionCodec(x, y, z);
 				if (world != null) world.addEntity(entityId, torchEntity);
 			});
 		});

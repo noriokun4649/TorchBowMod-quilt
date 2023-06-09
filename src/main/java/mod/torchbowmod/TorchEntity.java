@@ -10,8 +10,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -54,7 +55,7 @@ public class TorchEntity extends PersistentProjectileEntity {
         super.onBlockHit(blockHitResult);
         HitResult.Type raytraced$type = blockHitResult.getType();
         if (raytraced$type == HitResult.Type.BLOCK) {
-            BlockState blockstate = this.world.getBlockState(blockHitResult.getBlockPos());
+            BlockState blockstate = this.getWorld().getBlockState(blockHitResult.getBlockPos());
             setTorch(blockHitResult, blockstate, blockHitResult);
         }
     }
@@ -63,16 +64,16 @@ public class TorchEntity extends PersistentProjectileEntity {
     private void setTorch(BlockHitResult bloatwares, BlockState blockstate, HitResult raytracedResultIn) {
         BlockPos blockpos = bloatwares.getBlockPos();
         if (!blockstate.isAir()) {
-            if (!world.isClient) {
+            if (!getWorld().isClient) {
                 Direction face = ((BlockHitResult) raytracedResultIn).getSide();
                 BlockState torch_state = Blocks.WALL_TORCH.getDefaultState();
                 BlockPos setBlockPos = getPosOfFace(blockpos, face);
                 if (isBlockAIR(setBlockPos)) {
                     if (face == UP) {
                         torch_state = Blocks.TORCH.getDefaultState();
-                        world.setBlockState(setBlockPos, torch_state);
+                        getWorld().setBlockState(setBlockPos, torch_state);
                     } else if (face != DOWN) {
-                        world.setBlockState(setBlockPos, torch_state.with(HORIZONTAL_FACING, face));
+                        getWorld().setBlockState(setBlockPos, torch_state.with(HORIZONTAL_FACING, face));
                     }
                     this.remove(RemovalReason.KILLED);
                 }
@@ -92,7 +93,7 @@ public class TorchEntity extends PersistentProjectileEntity {
     }
 
     private boolean isBlockAIR(BlockPos pos) {
-        Block getBlock = this.world.getBlockState(pos).getBlock();
+        Block getBlock = this.getWorld().getBlockState(pos).getBlock();
         if (getBlock instanceof PlantBlock) return true;
         Block[] a = {Blocks.CAVE_AIR, Blocks.AIR, Blocks.SNOW, Blocks.VINE};//空気だとみなすブロックリスト
         for (Block target : a) {
@@ -107,7 +108,7 @@ public class TorchEntity extends PersistentProjectileEntity {
     }
 
     @Override
-    public Packet<?> createSpawnPacket() {
+    public Packet<ClientPlayPacketListener> createSpawnPacket() {
         PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
         byteBuf.writeInt(this.getId());
         byteBuf.writeDouble(this.getX());
